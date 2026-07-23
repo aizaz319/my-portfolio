@@ -16,6 +16,23 @@
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
 
+  // Fixed header can't be a scroll target — scroll document to top explicitly
+  document.querySelectorAll('a[href="#top"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (history.replaceState) {
+        history.replaceState(null, "", "#top");
+      } else {
+        location.hash = "top";
+      }
+      const topEl = document.getElementById("top");
+      if (topEl) {
+        topEl.focus({ preventScroll: true });
+      }
+    });
+  });
+
   if (toggle && nav) {
     const closeNav = () => {
       toggle.classList.remove("is-open");
